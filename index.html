@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTMLソース自動分割ツール</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 { margin-bottom: 0.5rem; font-size: 1.8rem; }
+    p { color: #64748b; margin-bottom: 2rem; }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: var(--card);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+    .drop-zone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 3rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #f1f5f9;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--primary);
+      background: #eef2ff;
+    }
+    .file-input { display: none; }
+    .result-section {
+      margin-top: 2rem;
+      display: none;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .card {
+      border: 1px solid var(--border);
+      padding: 1rem;
+      border-radius: 8px;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .card h3 { margin: 0; font-size: 1rem; color: #334155; }
+    .card span { font-size: 0.85rem; color: #94a3b8; }
+    .btn {
+      display: block;
+      text-align: center;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn.empty {
+      background: #cbd5e1;
+      color: #94a3b8;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>HTMLソース自動分割ツール</h1>
+  <p>インラインのHTMLファイルをドロップすると、HTML / CSS / JS に分解してダウンロードできます。</p>
+
+  <div class="container">
+    <!-- ファイル入力エリア -->
+    <div class="drop-zone" id="dropZone">
+      <p>ここにHTMLファイルをドラッグ＆ドロップ</p>
+      <span>または ファイルを選択</span>
+      <input type="file" id="fileInput" class="file-input" accept=".html">
+    </div>
+
+    <!-- 結果・ダウンロードエリア -->
+    <div class="result-section" id="resultSection">
+      <h2>分割結果</h2>
+      <div class="grid">
+        <!-- HTML -->
+        <div class="card">
+          <h3>index.html</h3>
+          <span id="htmlSize">0 bytes</span>
+          <a id="dlHtml" class="btn" download="index.html">ダウンロード</a>
+        </div>
+        <!-- CSS -->
+        <div class="card">
+          <h3>style.css</h3>
+          <span id="cssSize">0 bytes</span>
+          <a id="dlCss" class="btn" download="style.css">ダウンロード</a>
+        </div>
+        <!-- JS -->
+        <div class="card">
+          <h3>script.js</h3>
+          <span id="jsSize">0 bytes</span>
+          <a id="dlJs" class="btn" download="script.js">ダウンロード</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const resultSection = document.getElementById('resultSection');
+
+    // ドラッグ＆ドロップのエフェクト制御
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => { e.preventDefault(); dropZone.classList.add('dragover'); }, false);
+    });
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => { e.preventDefault(); dropZone.classList.remove('dragover'); }, false);
+    });
+
+    // ファイルが選択・ドロップされたときの処理
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+    dropZone.addEventListener('drop', (e) => handleFile(e.dataTransfer.files[0]));
+
+    function handleFile(file) {
+      if (!file || !file.name.endsWith('.html')) {
+        alert('HTMLファイルを選択してください。');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        processHTML(e.target.result);
+      };
+      reader.readAsText(file);
+    }
+
+    // 分割メインロジック
+    function processHTML(rawText) {
+      // 1. CSS (<style>タグの中身) を抽出して結合
+      const styleRegex = /<style[^>]*>([\s\S]*?)<\/style>/gi;
+      let cssContent = '';
+      let match;
+      while ((match = styleRegex.exec(rawText)) !== null) {
+      <!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTMLソース自動分割ツール</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>HTMLソース自動分割ツール</h1>
+  <p>インラインのHTMLファイルをドロップすると、HTML / CSS / JS に分解してダウンロードできます。</p>
+
+  <div class="container">
+    <!-- ファイル入力エリア -->
+    <div class="drop-zone" id="dropZone">
+      <p>ここにHTMLファイルをドラッグ＆ドロップ</p>
+      <span>または ファイルを選択</span>
+      <input type="file" id="fileInput" class="file-input" accept=".html">
+    </div>
+
+    <!-- 結果・ダウンロードエリア -->
+    <div class="result-section" id="resultSection">
+      <h2>分割結果</h2>
+      <div class="grid">
+        <!-- HTML -->
+        <div class="card">
+          <h3>index.html</h3>
+          <span id="htmlSize">0 bytes</span>
+          <a id="dlHtml" class="btn" download="index.html">ダウンロード</a>
+        </div>
+        <!-- CSS -->
+        <div class="card">
+          <h3>style.css</h3>
+          <span id="cssSize">0 bytes</span>
+          <a id="dlCss" class="btn" download="style.css">ダウンロード</a>
+        </div>
+        <!-- JS -->
+        <div class="card">
+          <h3>script.js</h3>
+          <span id="jsSize">0 bytes</span>
+          <a id="dlJs" class="btn" download="script.js">ダウンロード</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+</body>
+</html>
