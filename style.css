@@ -1,0 +1,114 @@
+:root {
+  --primary: #4f46e5;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+}
+
+p {
+  color: #64748b;
+  margin-bottom: 2rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  background: var(--card);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  box-sizing: border-box;
+}
+
+.drop-zone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 3rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #f1f5f9;
+}
+
+.drop-zone:hover, .drop-zone.dragover {
+  border-color: var(--primary);
+  background: #eef2ff;
+}
+
+.file-input {
+  display: none;
+}
+
+.result-section {
+  margin-top: 2rem;
+  display: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.card {
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 8px;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #334155;
+}
+
+.card span {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.btn {
+  display: block;
+  text-align: center;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: opacity 0.2s;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn.empty {
+  background: #cbd5e1;
+  color: #94a3b8;
+  pointer-events: none;
+}
